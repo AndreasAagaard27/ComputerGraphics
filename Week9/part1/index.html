@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Shadows and Quads</title>
+</head>
+<body>
+    <canvas id="c" width="512" height="512"></canvas>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        attribute vec2 vTexCoord;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        
+        varying vec2 fTexCoord;
+        
+        void main() {
+            fTexCoord = vTexCoord;
+            gl_Position = uProjectionMatrix * uModelViewMatrix * vPosition;
+        }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        uniform sampler2D uTexture;
+        varying vec2 fTexCoord;
+        
+        void main() {
+            gl_FragColor = texture2D(uTexture, fTexCoord);
+        }
+    </script>
+
+    <script type="text/javascript" src="../AngelParams/initShaders.js"></script>
+    <script type="text/javascript" src="../AngelParams/MV.js"></script>
+    <script type="text/javascript" src="../AngelParams/webgl-utils.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>

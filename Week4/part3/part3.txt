@@ -1,0 +1,54 @@
+Reflection on Affine Transformations and Viewing Transformations
+
+Part 1:
+
+Transformations Used:
+1. Orthographic Projection:
+   P = ortho(l, r, b, t, n, f)
+   
+2. Translation:
+   T = translate(tx, ty, tz)
+
+3. Rotation about x-axis:
+   Rx = rotateX(angleX)
+
+4. Rotation about y-axis:
+   Ry = rotateY(angleY)
+
+Current Transformation Matrix (CTM) for the Cube:
+CTM = P * (T * (Rx * Ry))
+
+Where:
+- P is the orthographic projection matrix.
+- T is the translation matrix.
+- Rx and Ry are rotation matrices about the x- and y-axes.
+
+Formula:
+CTM = ortho(-1, 2, -1, 2, -2, 2) * (translate(0.5, -0.2, 0) * (rotateX(35.264) * rotateY(45)))
+
+
+Part 2:
+
+Transformations Used:
+1. Perspective Projection:
+   P = perspective(fovy, aspect, near, far)
+
+2. Viewing Transformation:
+   V = lookAt(eye, at, up)
+
+Current Transformation Matrix (CTM) for Each Cube:
+1. For the first viewpoint:
+   CTM = P * lookAt([0, 0, 5], [2, 0, 0], [0, 1, 0])
+
+2. For the second viewpoint:
+   CTM = P * lookAt([3, 0, 3], [-1, 0, 0], [0, 1, 0])
+
+3. For the third viewpoint:
+   CTM = P * lookAt([3, 3, 3], [0, 1.1, 0], [0, 1, 0])
+
+Where:
+- P is the perspective projection matrix.
+- lookAt(eye, at, up) defines the viewing transformation.
+
+Formula:
+CTM = perspective(fovy, aspect, near, far) * lookAt(eye, at, up)

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Setup</title>
+</head>
+<body>
+    <canvas id="c" width="512" height="512"></canvas>
+    <br>
+    <button id="clearButton">Clear Canvas</button>
+    <br>
+    <label for="clearColor">Select Clear Color:</label>
+    <input type="color" id="clearColor" value="#6495ED">
+    <br>
+    <label for="pointColor">Select Point Color:</label>
+    <input type="color" id="pointColor" value="#000000">
+    <br>
+    <button id="pointModeButton">Point Mode</button>
+    <button id="triangleModeButton">Triangle Mode</button>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        attribute vec4 vColor;
+        varying vec4 fColor;
+        void main() {
+            gl_Position = vPosition;
+            fColor = vColor;
+            gl_PointSize = 20.0;
+        }
+    </script>
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 fColor;
+        void main() {
+            gl_FragColor = fColor;
+        }
+    </script>
+    <script type="text/javascript" src="../AngelParams/initShaders.js"></script>
+    <script type="text/javascript" src="../AngelParams/MV.js"></script>
+    <script type="text/javascript" src="../AngelParams/webgl-utils.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Sphere with Phong Reflection Model</title>
+</head>
+<body>
+    <canvas id="c" width="512" height="512"></canvas>
+
+    <div>
+        <label for="kdSlider">Diffuse coefficient (k_d):</label>
+        <input id="kdSlider" type="range" min="0" max="1" step="0.01" value="0.8">
+    </div>
+    <div>
+        <label for="ksSlider">Specular coefficient (k_s):</label>
+        <input id="ksSlider" type="range" min="0" max="1" step="0.01" value="0.5">
+    </div>
+    <div>
+        <label for="shininessSlider">Shininess (s):</label>
+        <input id="shininessSlider" type="range" min="1" max="100" step="1" value="20">
+    </div>
+    <div>
+        <label for="leSlider">Light intensity (L_e):</label>
+        <input id="leSlider" type="range" min="0" max="2" step="0.01" value="1.0">
+    </div>
+    <div>
+        <label for="laSlider">Ambient intensity (L_a):</label>
+        <input id="laSlider" type="range" min="0" max="1" step="0.01" value="0.2">
+    </div>
+    <button id="increase">Increase Subdivision</button>
+    <button id="decrease">Decrease Subdivision</button>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+
+        uniform float kd; 
+        uniform float ks; 
+        uniform float shininess;
+        uniform float le; 
+        uniform float la; 
+
+        varying vec4 vColor;
+
+        void main() {
+            gl_Position = uProjectionMatrix * uModelViewMatrix * vPosition;
+
+            vec3 normal = normalize(vPosition.xyz);
+
+            vec3 lightDirection = normalize(vec3(0.0, 0.0, -1.0));
+            vec3 viewDirection = normalize(-vPosition.xyz);
+
+            vec3 ambient = la * kd * vec3(1.0, 0.0, 0.0);
+
+            float diffuseIntensity = max(dot(normal, lightDirection), 0.0);
+            vec3 diffuse = le * kd * diffuseIntensity * vec3(1.0, 0.0, 0.0);
+
+            vec3 reflectionDirection = reflect(-lightDirection, normal);
+            float specularIntensity = pow(max(dot(reflectionDirection, viewDirection), 0.0), shininess);
+            vec3 specular = le * ks * specularIntensity * vec3(1.0, 1.0, 1.0); 
+
+            vec3 color = ambient + diffuse + specular;
+
+            vColor = vec4(color, 1.0);
+        }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 vColor;
+
+        void main() {
+            gl_FragColor = vColor;
+        }
+    </script>
+
+    <script type="text/javascript" src="../AngelParams/initShaders.js"></script>
+    <script type="text/javascript" src="../AngelParams/MV.js"></script>
+    <script type="text/javascript" src="../AngelParams/webgl-utils.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+a) What is the difference between Phong shading and Phong lighting (the Phong reflection model)?
+Phong Lighting: The model used to compute light interaction (ambient, diffuse, specular).
+Phong Shading: The technique where lighting is computed per pixel using interpolated normals.
+
+b) What is the difference between flat shading, Gouraud shading, and Phong shading?
+Flat Shading: Lighting is calculated per triangle. Pro: Fast. Con: Faceted look.
+Gouraud Shading: Lighting is calculated per vertex, interpolated across pixels. Pro: Faster than Phong, smooth. Con: Misses highlights.
+Phong Shading: Lighting is calculated per pixel. Pro: Accurate highlights. Con: More expensive.
+Best for highlights: Phong shading, because it calculates lighting per pixel.
+
+c) What is the difference between a directional light and a point light?
+Directional Light: Light rays are parallel and come from a single direction.
+Point Light: Light radiates from a specific position in all directions.
+
+d) Does the eye position influence the shading of an object in any way?
+Yes, it affects the specular reflection, impacting how highlights are viewed.
+
+e) What is the effect of setting the specular term to (0, 0, 0)?
+It removes specular highlights, making the surface appear matte.
+
+f) What is the effect of increasing the shininess exponent (𝛼)?
+It makes the specular highlight smaller and sharper, giving a polished look.
+
+g) In what coordinate space did you compute the lighting?
+Camera (view) space.

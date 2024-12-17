@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Sphere with Environment Background</title>
+</head>
+<body>
+    <canvas id="c" width="512" height="512"></canvas>
+    <button id="increase">Increase Subdivision</button>
+    <button id="decrease">Decrease Subdivision</button>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        uniform mat4 uMtex;
+        uniform bool uIsBackground;
+
+        varying vec3 vDirection;
+
+        void main() {
+            if (uIsBackground) {
+                vec4 worldPos = uMtex * vPosition;
+                worldPos.xyz = worldPos.xyz / worldPos.w;
+                vDirection = normalize(worldPos.xyz);
+                gl_Position = vPosition; 
+            } else {
+                gl_Position = uProjectionMatrix * uModelViewMatrix * vPosition;
+                vec4 dir = uMtex * vPosition;
+                vDirection = normalize(dir.xyz);
+            }
+        }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        uniform samplerCube earthTexture;
+        varying vec3 vDirection;
+
+        void main() {
+            vec3 dir = normalize(vDirection);
+            vec4 texColor = textureCube(earthTexture, dir);
+            vec3 lightDir = normalize(vec3(0.0, 0.0, -1.0));
+            float diffuse = max(dot(dir, lightDir), 0.0);
+            vec3 ambient = 0.2 * texColor.rgb;
+            vec3 diffuseColor = diffuse * texColor.rgb;
+            gl_FragColor = vec4(ambient + diffuseColor, texColor.a);
+        }
+    </script>
+
+    <script type="text/javascript" src="../AngelParams/initShaders.js"></script>
+    <script type="text/javascript" src="../AngelParams/MV.js"></script>
+    <script type="text/javascript" src="../AngelParams/webgl-utils.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL Sphere with Depth and Culling</title>
+</head>
+<body>
+    <canvas id="c" width="512" height="512"></canvas>
+    <button id="increase">Increase Subdivision</button>
+    <button id="decrease">Decrease Subdivision</button>
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 vPosition;
+        uniform mat4 uModelViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        varying vec4 vColor;
+    
+        void main() {
+            gl_Position = uProjectionMatrix * uModelViewMatrix * vPosition;
+    
+            vec3 normal = normalize(vPosition.xyz);
+    
+            vec3 lightDirection = normalize(vec3(0.0, 0.0, -1.0));
+    
+            float diffuseIntensity = max(dot(normal, lightDirection), 0.0);
+                vec3 k_d = vec3(1.0, 1.0, 1.0); 
+            vec3 L_d = vec3(1.0, 1.0, 1.0);
+    
+            vColor = vec4(diffuseIntensity * k_d * L_d, 1.0);
+        }
+    </script>
+    
+    
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        varying vec4 vColor;
+    
+        void main() {
+            gl_FragColor = vColor;
+        }
+    </script>
+    
+    <script type="text/javascript" src="../AngelParams/initShaders.js"></script>
+    <script type="text/javascript" src="../AngelParams/MV.js"></script>
+    <script type="text/javascript" src="../AngelParams/webgl-utils.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>
